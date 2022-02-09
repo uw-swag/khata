@@ -91,6 +91,9 @@ class GumTreeDiff:
         output, error = command.communicate()
         if error.decode('utf-8'):
             return None
+        # remove files
+        os.remove(b_file)
+        os.remove(a_file)
         return output.decode('utf-8')
 
     def get_dotfiles(self, file):
