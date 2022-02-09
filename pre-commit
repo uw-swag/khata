@@ -1,0 +1,13 @@
+#! /home/h3keshav/Documents/thesis/gitest/venv/bin/python
+from importlib import import_module
+
+
+if __name__ == '__main__':
+    module = 'jitgnn.jitgnn_hook'
+    model = 'JITGNNHook'
+    mod = import_module(module)
+    cls = getattr(mod, model)
+    hook = cls()
+    hook.run_model()
+
+

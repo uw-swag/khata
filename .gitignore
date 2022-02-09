@@ -1,0 +1,8 @@
+.idea/
+*.pt
+diff/
+*.pyz
+*/__pycache__/
+venv
+*.pkl
+
