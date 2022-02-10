@@ -1,4 +1,4 @@
-#! /home/h3keshav/Documents/thesis/gitest/venv/bin/python
+#! /usr/bin/python3
 from importlib import import_module
 
 
