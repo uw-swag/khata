@@ -12,6 +12,7 @@ import torch.nn as nn
 from torch.nn import Parameter
 import torch.nn.functional as F
 import pandas as pd
+import warnings
 
 from hook_interface import HookInterface
 
@@ -60,14 +61,16 @@ class JITGNNHook(HookInterface):
             if f_subtree:
                 files.append(f_subtree)
 
-            if all(f is None for f in files):
-                print('nothing to evaluate')
-            else:
+        if all(f is None for f in files):
+            print('nothing to evaluate')
+        else:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
                 prd = main(files)
-                print(prd)
+            print(prd)
 
-            print(time_since(start))
-            sys.exit(-1)
+        print(time_since(start))
+        sys.exit(-1)
 
 
 class GumTreeDiff:
@@ -527,7 +530,7 @@ def store_subtrees(path, before, after):
     try:
         b_dot, a_dot = gumtree.get_dotfiles(f)
     except SyntaxError:
-        print('!!!!! source code has syntax error !!!!!')
+        print('{} file is not supported.'.format(path))
         return None
 
     subtree = SubTreeExtractor(b_dot)
@@ -535,7 +538,7 @@ def store_subtrees(path, before, after):
     subtree = SubTreeExtractor(a_dot)
     a_subtree = subtree.extract_subtree()
     if len(b_subtree[0]) == 0 and len(a_subtree[0]) == 0:
-        print('!!!!! before and after empty !!!!!')
+        print('{} file is trivially changed.'.format(path))
         return None
     elif len(b_subtree[0]) == 0:
         b_subtree[0].append('None')
